@@ -1,17 +1,40 @@
 import { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Box, FormControl, FormLabel, Input, Button, Toast } from '@chakra-ui/react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import er from "../assets/er.jpg"
+import { useDispatch, useSelector } from 'react-redux';
+import { AdminLogin } from '../Store/Auth/Auth.Action';
+import axios from 'axios';
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate()
+  // const [username, setUsername] = useState('');
+  // const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [form, setForm] = useState({
 
+    email: "",
+    password: "",
+  })
+  // const data = useSelector((store) => {
+  //   console.log(store.auth.data)
+  // })
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+
+    const { name, value } = e.target
+    setForm({ ...form, [name]: value })
+  };
   const handleLogin = () => {
-    if (username === 'admin' && password === 'password') {
-      // TODO: handle successful login
-    } else {
-      setError('Invalid username or password');
+
+    if (form.email && form.password) {
+      try {
+        dispatch(AdminLogin(form,navigate))
+        // window.location.href="/Dashboard"
+
+      } catch (error) {
+        alert("user or password incorrect")
+      }
     }
   };
 
@@ -35,19 +58,20 @@ function Login() {
         <Box p={"30px"}>
           <Box width={"40%"} minWidth="250px" height={"400px"} bg={"rgba(100,100,100,0.6)"} color={"white"} p={"50px"} borderRadius={"10px"} justify="left">
             <FormControl isInvalid={error !== ''}>
-              <FormLabel>Username</FormLabel>
-              <Input type="text" value={username} onChange={(event) => setUsername(event.target.value)} />
+              <FormLabel>Email</FormLabel>
+              {/* (event)=>handleChange(event) */}
+              <Input type="email" value={form.email} name="email" onChange={handleChange} />
             </FormControl>
             <FormControl isInvalid={error !== ''} mt={4}>
               <FormLabel>Password</FormLabel>
-              <Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+              <Input type="password" value={form.password} name="password" onChange={handleChange} />
             </FormControl>
             {error && <Box mt={4} color="red">{error}</Box>}
-            <Link to={"/Dashboard"}>
-              <Button colorScheme="blue" mt={4} onClick={handleLogin}>
-                Login
-              </Button>
-            </Link>
+            {/* <Link to={"/Dashboard"}> */}
+            <Button colorScheme="blue" mt={4} onClick={handleLogin}>
+              Login
+            </Button>
+            {/* </Link> */}
           </Box>
         </Box>
       </Box>

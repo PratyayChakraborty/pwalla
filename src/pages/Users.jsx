@@ -41,7 +41,7 @@ const User = () => {
 
     const  data  = useSelector((store) => store.UserDetails);
     const dispatch = useDispatch();
-    console.log(data)
+    // console.log(data)
     
     useEffect(() => {
         dispatch(UserDetailsAction());

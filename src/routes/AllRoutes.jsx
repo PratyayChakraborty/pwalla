@@ -33,6 +33,7 @@ const AllRoutes = () => {
                 <Route path="/update" element={<Update />} />
 
                 <Route path="/logs" element={<Logs />} />
+                
 
 
 
